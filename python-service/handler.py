@@ -12,18 +12,21 @@ def hello(event, context):
     print(type(event['body']))
     # GETの入力チェック
     if event['httpMethod'] == "GET":
-        #get_params=urllib.parse.parse_qs(event['queryStringParameters'])
-        for k, v in event['queryStringParameters'].items():
-            print(type(k))
-            print(k)
-            print(type(v))
-            print(v)
-        show_validate(event['queryStringParameters'], item)
+        get_params = event['queryStringParameters']
+        param = {
+            'name': get_params.get('name'),
+            'age': get_integer(get_params.get('age'))
+        }
+        show_validate(param, item)
     # POSTの入力チェック
     elif event['httpMethod'] == "POST":
         post_params = urllib.parse.parse_qs(base64.b64decode(event['body']).decode())
-        print(post_params["age"])
-        show_validate(post_params, user)
+        param = {
+            'name': post_params.get('name')[0],
+            'age': get_integer(post_params.get('age')[0])
+        }
+        print(json.dumps(param))
+        show_validate(param, user)
 
     # HTMLテンプレート
     env = Environment(loader=FileSystemLoader('./templates', encoding='utf8'))
@@ -43,3 +46,14 @@ def show_validate(data, schema):
     print(v.validate(data))
     print(v.errors)
 
+def get_integer(str):
+    try:
+        return int(str)
+    except Exception:
+        return str
+
+def get_float(str):
+    try:
+        return float(str)
+    except Exception:
+        return str
