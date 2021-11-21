@@ -105,7 +105,7 @@ functions:
             Ref: exampleLoadBalancerListener
           priority: 1
           conditions:
-            path: /hello
+            path: /python
 #    Define function environment variables here
 #    environment:
 #      variable2: value2
