@@ -1,2 +1,3 @@
 jinja2
 cerberus
+psycopg2-binary
